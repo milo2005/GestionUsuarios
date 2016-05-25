@@ -9,8 +9,9 @@ import java.util.List;
 
 import unicauca.movil.gestionusuarios.adapters.UsuarioAdapter;
 import unicauca.movil.gestionusuarios.models.Usuario;
+import unicauca.movil.gestionusuarios.net.api.UsuarioApi;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UsuarioApi.OnUsuarios {
 
     List<Usuario> data;
     UsuarioAdapter adapter;
@@ -26,5 +27,16 @@ public class MainActivity extends AppCompatActivity {
         data = new ArrayList<>();
         adapter = new UsuarioAdapter(getLayoutInflater(), data);
         list.setAdapter(adapter);
+
+        UsuarioApi api = new UsuarioApi(this);
+        api.getUsuarios(this);
+    }
+
+    @Override
+    public void onUsuarios(List<Usuario> data) {
+        for(Usuario u : data){
+            this.data.add(u);
+        }
+        adapter.notifyDataSetChanged();
     }
 }
